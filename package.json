@@ -1,0 +1,23 @@
+{
+  "name": "broccoli-html2js",
+  "description": "",
+  "version": "0.0.1",
+  "author": "Alexander Tarasyuk <alexander.v.tarasyuk@gmail.com>",
+  "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/a-tarasyuk/broccoli-html2js"
+  },
+  "dependencies": {
+    "html-minifier": "^0.6.1",
+    "mkdirp": "^0.3.5",
+    "broccoli-writer": "^0.1.1",
+    "broccoli-kitchen-sink-helpers": "^0.2.0"
+  },
+  "keywords": [
+    "broccoli-plugin",
+    "html2js",
+    "angularjs"
+  ]
+}

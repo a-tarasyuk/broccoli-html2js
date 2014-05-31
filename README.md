@@ -58,6 +58,7 @@ templates = html2js(tree, {
 });
 ```
 ### Release History
+0.0.4 - Updated Readme
 
 0.0.3 - Add support for CoffeeScript, Jade, option `singleModule` (for placing all templates in a single module).
 

@@ -1,8 +1,11 @@
 {
   "name": "broccoli-html2js",
-  "description": "",
-  "version": "0.0.2",
-  "author": "Alexander Tarasyuk <alexander.v.tarasyuk@gmail.com>",
+  "description": "Converts AngularJS templates to JavaScript",
+  "version": "0.0.3",
+  "author": {
+    "name": "Alexander Tarasyuk",
+    "email": "alexander.v.tarasyuk@gmail.com"
+  },
   "main": "index.js",
   "license": "MIT",
   "repository": {
@@ -13,11 +16,19 @@
     "html-minifier": "^0.6.1",
     "mkdirp": "^0.3.5",
     "broccoli-writer": "^0.1.1",
-    "broccoli-kitchen-sink-helpers": "^0.2.0"
+    "broccoli-kitchen-sink-helpers": "^0.2.0",
+    "jade": "^1.3.1"
   },
   "keywords": [
     "broccoli-plugin",
     "html2js",
     "angularjs"
-  ]
+  ],
+  "readme": "# broccoli-html2js \n\nConverts AngularJS templates to JavaScript\n\n#### Installation\n```js\nnmp install broccoli-html2js \n```\n#### Example\n```js\ntemplates = html2js(tree, {\n  module: 'Bookmarks.views',     // optional\n  replace: function (path) {     // optional \n    return path;\n  },\n  htmlmin: {},                  // optional (see more options on https://github.com/kangax/html-minifier)\n  inputFiles: ['*.html'],       // required\n  outputFile: '/templates.js'   // required\n});\n```\n#### Options\n...\n\n#### Todo\n...\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/a-tarasyuk/broccoli-html2js/issues"
+  },
+  "_id": "broccoli-html2js@0.0.2",
+  "_from": "broccoli-html2js@"
 }

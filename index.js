@@ -1,61 +1,8 @@
 
 'use strict';
 
-var EXTENSIONS = ['html'];
-
-var Writer  = require('broccoli-writer'),
-    HTMLmin = require('html-minifier'),
-    fs      = require('fs'),
-    helpers = require('broccoli-kitchen-sink-helpers'),
-    mkdirp  = require('mkdirp'),
-    path    = require('path');
-
-var Utils = {
-
- /**
-   * moduleTemplate
-   * 
-   * @param {String} name
-   * @param {Array}  dependencies
-   * 
-   * @return {String}
-   */
-  moduleTemplate: function (name, dependencies) {
-    return 'angular.module("' + name + '",' 
-         +   '[' + (dependencies || []).map(function (e) { return '\'' + e + '\'' }).join(',') + ']'
-         + ');';
-  },
-
-  /**
-   * template
-   * 
-   * @param {String} name
-   * @param {String} content
-   * 
-   * @return {String}
-   */
-  template: function (name, content) {
-    return 'angular.module("' + name + '", []).run(["$templateCache", function ($templateCache) {' 
-         +   '$templateCache.put("' + name + '", ' + content + ');'
-         + '}]);';
-  },
-
-  /**
-   * minify
-   * 
-   * @param {String} html
-   * @param {Object} content
-   * 
-   * @return {String}
-   */
-  minify: function (html, options) {
-    var content = HTMLmin.minify(html, options.htmlmin || {})
-      .replace(/'/g, '\\\'')
-      .replace(/"/g, '\\"');
-
-    return '\'' + content + '\'';
-  }
-};
+var Writer   = require('broccoli-writer'),
+    _HTML2JS = require('./lib/html2js');
 
 /**
  * HTML2JS
@@ -72,8 +19,12 @@ function HTML2JS(inputTree, options) {
 
   this.inputTree    = inputTree;
   this.options      = options || {};
-  this.inputFiles   = this.options.inputFiles || {};
-  this.outputFile   = this.options.outputFile || {};
+  this.inputFiles   = this.options.inputFiles || [];
+  this.outputFile   = this.options.outputFile || '';
+  this.singleModule = this.options.singleModule || false;
+  this.module       = this.options.module || '';
+
+  _HTML2JS.validate(this.options);
 }
 
 HTML2JS.prototype             = Object.create(Writer.prototype);
@@ -89,31 +40,7 @@ HTML2JS.prototype.constructor = HTML2JS;
  */
 HTML2JS.prototype.write = function (readTree, destDir) {
   return readTree(this.inputTree).then(function (srcDir) {
-    helpers.assertAbsolutePaths([this.outputFile]);
-
-    var destPathDir  = path.join(destDir, path.dirname(this.outputFile)),
-        destPathFile = path.join(destDir, this.outputFile),
-        files        = helpers.multiGlob(this.inputFiles, {cwd: srcDir});
-
-      files = (files || []).filter(function (file) {
-        return typeof (file) === 'string' && ~EXTENSIONS.indexOf(file.split('.').pop());
-      }.bind(this));
-
-    mkdirp.sync(destPathDir);
-
-    if (this.options.module) {
-      fs.appendFileSync(destPathFile, Utils.moduleTemplate(this.options.module, files));
-    }    
-
-    files.forEach(function (filePath) {
-      var _filePath = (typeof this.options.replace === 'function') 
-                        ? this.options.replace.call(null, filePath) 
-                        : filePath,
-          content   = Utils.minify(fs.readFileSync(srcDir + '/' + filePath, {encoding: 'utf8'}), this.options);
-  
-      fs.appendFileSync(destPathFile, Utils.template(_filePath, content));
-    }.bind(this));
-
+    _HTML2JS.generate(this, srcDir, destDir);
   }.bind(this));
 };
 

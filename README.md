@@ -1,10 +1,11 @@
-# broccoli-html2js 
+# broccoli-html2js
+**This project is no longer maintained**
 
 Converts AngularJS templates to JavaScript
 
 ### Installation
 ```shell
-nmp install broccoli-html2js 
+nmp install broccoli-html2js
 ```
 
 ### Options
